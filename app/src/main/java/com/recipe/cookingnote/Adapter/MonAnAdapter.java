@@ -64,8 +64,8 @@ public class MonAnAdapter extends RecyclerView.Adapter<MonAnAdapter.MonAnViewHol
 
         public MonAnViewHolder(@NonNull View itemView) {
             super(itemView);
-            tvTenMon = itemView.findViewById(R.id.tvTenMonItem);
-            imgMon = itemView.findViewById(R.id.imgMonItem);
+            tvTenMon = itemView.findViewById(R.id.tvTenMon);
+            imgMon = itemView.findViewById(R.id.imgMonAn);
         }
     }
 }

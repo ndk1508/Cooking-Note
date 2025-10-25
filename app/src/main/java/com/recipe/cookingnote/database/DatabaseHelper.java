@@ -19,8 +19,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("CREATE TABLE DanhMuc (" +
                 "idDanhMuc INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 "tenDanhMuc TEXT NOT NULL)");
-        db.execSQL("INSERT INTO DanhMuc (tenDanhMuc) VALUES ('Món chính')");
         db.execSQL("INSERT INTO DanhMuc (tenDanhMuc) VALUES ('Ăn sáng')");
+        db.execSQL("INSERT INTO DanhMuc (tenDanhMuc) VALUES ('Ăn trưa')");
+        db.execSQL("INSERT INTO DanhMuc (tenDanhMuc) VALUES ('Ăn tối')");
         db.execSQL("INSERT INTO DanhMuc (tenDanhMuc) VALUES ('Tráng miệng')");
 
         // 🔹 Tạo bảng MonAn
