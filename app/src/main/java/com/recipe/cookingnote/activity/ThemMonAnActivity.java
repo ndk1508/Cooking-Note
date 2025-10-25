@@ -13,7 +13,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.recipe.cookingnote.R;
 import com.recipe.cookingnote.database.DatabaseHelper;
-
 import java.util.ArrayList;
 
 public class ThemMonAnActivity extends AppCompatActivity {
@@ -145,7 +144,7 @@ public class ThemMonAnActivity extends AppCompatActivity {
             }
         }
 
-        Toast.makeText(this, "Đã thêm món ăn thành công!", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Đã lưu món ăn thành công!", Toast.LENGTH_SHORT).show();
 
         // 🔹 Reset form
         edtTenMon.setText("");
