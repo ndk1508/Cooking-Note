@@ -102,6 +102,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="56dp"
+        android:background="#7DB3E6"
         android:orientation="horizontal"
         android:gravity="center">
 
