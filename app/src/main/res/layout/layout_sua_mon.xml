@@ -19,7 +19,7 @@
             android:layout_alignParentStart="true"
             android:background="@android:color/transparent"
             android:src="@drawable/ic_back"
-            android:contentDescription="Quay lại"/>
+            android:contentDescription="Quay lại" />
 
         <TextView
             android:id="@+id/tvTieuDe"
@@ -37,13 +37,44 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:padding="16dp">
+        android:padding="16dp"
+        android:clipToPadding="false"
+        android:scrollbars="none"
+        android:paddingBottom="80dp">   <!-- 👈 Chừa khoảng trống cho menu dưới -->
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+            <!-- 🔹 Ảnh món ăn -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Ảnh món ăn:"
+                android:textSize="16sp"
+                android:textColor="#000" />
+
+            <ImageView
+                android:id="@+id/imgMonAn"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_marginVertical="8dp"
+                android:scaleType="centerCrop"
+                android:background="@drawable/edittext_border"
+                android:src="@drawable/ic_image_placeholder" />
+
+            <Button
+                android:id="@+id/btnChonAnh"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Chọn ảnh"
+                android:backgroundTint="#03A9F4"
+                android:textColor="@android:color/white"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="16dp" />
+
+            <!-- 🔹 Tên món -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -60,6 +91,7 @@
                 android:layout_marginBottom="12dp"
                 android:padding="8dp" />
 
+            <!-- 🔹 Danh mục -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -73,6 +105,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp" />
 
+            <!-- 🔹 Nguyên liệu -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -91,6 +124,7 @@
                 android:layout_marginBottom="16dp"
                 android:padding="8dp" />
 
+            <!-- 🔹 Bước làm -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -109,17 +143,20 @@
                 android:layout_marginBottom="24dp"
                 android:padding="8dp" />
 
-            <Button
-                android:id="@+id/btnCapNhat"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Cập nhật"
-                android:textColor="@android:color/white"
-                android:backgroundTint="#2196F3" />
+
         </LinearLayout>
     </ScrollView>
-
-    <!-- 🔹 Thanh điều hướng dưới (code tay) -->
+    <!-- 🔹 Nút cập nhật -->
+    <Button
+        android:id="@+id/btnCapNhat"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Cập nhật"
+        android:textColor="@android:color/white"
+        android:backgroundTint="#2196F3"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginVertical="8dp" />
+    <!-- 🔹 Thanh điều hướng dưới -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="64dp"
@@ -136,12 +173,10 @@
             android:layout_weight="1"
             android:gravity="center"
             android:orientation="vertical">
-
             <ImageView
                 android:layout_width="28dp"
                 android:layout_height="28dp"
                 android:src="@drawable/ic_info"/>
-
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -156,19 +191,15 @@
             android:layout_weight="1"
             android:gravity="center"
             android:orientation="vertical">
-
             <ImageView
                 android:layout_width="28dp"
                 android:layout_height="28dp"
                 android:src="@drawable/ic_heart"/>
-
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Yêu thích"
-                android:textSize="12sp"
-                android:textColor="#000000" />
-
+                android:textSize="12sp"/>
         </LinearLayout>
 
         <LinearLayout
@@ -178,18 +209,15 @@
             android:layout_weight="1"
             android:gravity="center"
             android:orientation="vertical">
-
             <ImageView
                 android:layout_width="28dp"
                 android:layout_height="28dp"
                 android:src="@drawable/ic_setting"/>
-
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Cài đặt"
-                android:textSize="12sp"
-                android:textColor="#000000" />
+                android:textSize="12sp"/>
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>

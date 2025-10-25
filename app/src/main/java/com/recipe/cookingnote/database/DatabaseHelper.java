@@ -19,15 +19,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("CREATE TABLE DanhMuc (" +
                 "idDanhMuc INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 "tenDanhMuc TEXT NOT NULL)");
+        db.execSQL("INSERT INTO DanhMuc (tenDanhMuc) VALUES ('Món chính')");
+        db.execSQL("INSERT INTO DanhMuc (tenDanhMuc) VALUES ('Ăn sáng')");
+        db.execSQL("INSERT INTO DanhMuc (tenDanhMuc) VALUES ('Tráng miệng')");
 
         // 🔹 Tạo bảng MonAn
-        db.execSQL("CREATE TABLE MonAn (" +
-                "idMonAn INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                "tenMon TEXT NOT NULL, " +
-                "moTa TEXT, " +
-                "hinhAnh TEXT, " +          // nếu lưu đường dẫn ảnh
-                "idDanhMuc INTEGER, " +
-                "FOREIGN KEY (idDanhMuc) REFERENCES DanhMuc(idDanhMuc))");
+        db.execSQL("CREATE TABLE MonAn (\n" +
+                "    idMonAn INTEGER PRIMARY KEY AUTOINCREMENT,\n" +
+                "    tenMon TEXT NOT NULL,\n" +
+                "    moTa TEXT,\n" +
+                "    anhMon TEXT,              -- \uD83D\uDD39 Thêm cột này để lưu URI ảnh\n" +
+                "    idDanhMuc INTEGER,\n" +
+                "    FOREIGN KEY(idDanhMuc) REFERENCES DanhMuc(idDanhMuc)\n" +
+                ");\n)");
 
         // 🔹 Tạo bảng NguyenLieu
         db.execSQL("CREATE TABLE NguyenLieu (" +
