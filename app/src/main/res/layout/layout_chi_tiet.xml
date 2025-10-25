@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FAFAFA"
+    tools:context=".ui.DetailActivity">
+
+    <!-- 🔹 Thanh trên cùng -->
+    <LinearLayout
+        android:id="@+id/topBar"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:orientation="horizontal"
+        android:background="#03A9F4"
+        android:gravity="center_vertical"
+        android:paddingHorizontal="12dp"
+        android:elevation="6dp">
+
+        <ImageButton
+            android:id="@+id/btnBack"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_back"
+            android:tint="#FFFFFF" />
+
+        <TextView
+            android:id="@+id/tvTieuDe"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Chi tiết món ăn"
+            android:textColor="#FFFFFF"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:gravity="center" />
+
+        <ImageButton
+            android:id="@+id/btnFavorite"
+            android:layout_width="33dp"
+            android:layout_height="36dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_herat" />
+    </LinearLayout>
+
+    <!-- 🔹 Nội dung chính -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/topBar"
+        android:layout_above="@id/bottomBar"
+        android:padding="20dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center_horizontal">
+
+            <!-- Ảnh món ăn -->
+            <ImageView
+                android:id="@+id/imgFood"
+                android:layout_width="280dp"
+                android:layout_height="200dp"
+                android:layout_marginBottom="16dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/gallery"
+                android:background="@drawable/edittext_border"
+                android:clipToOutline="true"
+                android:elevation="4dp" />
+
+            <!-- Tên món -->
+            <TextView
+                android:id="@+id/tvFoodName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tên món ăn"
+                android:textColor="#212121"
+                android:textSize="22sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="20dp" />
+
+            <!-- Nguyên liệu -->
+            <TextView
+                android:id="@+id/tvIngredientsTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Nguyên liệu"
+                android:textStyle="bold"
+                android:textColor="#0288D1"
+                android:textSize="18sp"
+                android:layout_marginBottom="6dp" />
+
+            <TextView
+                android:id="@+id/tvIngredients"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="- Thịt gà\n- Gừng, sả\n- Muối, tiêu"
+                android:textColor="#424242"
+                android:textSize="15sp"
+                android:lineSpacingExtra="4dp"
+                android:layout_marginBottom="20dp"
+                android:paddingStart="8dp" />
+
+            <!-- Các bước -->
+            <TextView
+                android:id="@+id/tvStepsTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Cách làm"
+                android:textStyle="bold"
+                android:textColor="#0288D1"
+                android:textSize="18sp"
+                android:layout_marginBottom="6dp" />
+
+            <TextView
+                android:id="@+id/tvSteps"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="- Bước 1: Chuẩn bị nguyên liệu\n- Bước 2: Ướp và xào gà\n- Bước 3: Hoàn thành món ăn"
+                android:textColor="#424242"
+                android:textSize="15sp"
+                android:lineSpacingExtra="4dp"
+                android:paddingStart="8dp" />
+        </LinearLayout>
+    </ScrollView>
+
+    <!-- 🔹 Thanh điều hướng dưới cùng -->
+    <LinearLayout
+        android:id="@+id/bottomBar"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:background="#FFFFFF"
+        android:elevation="10dp">
+
+        <!-- Nút Thông tin -->
+        <LinearLayout
+            android:id="@+id/navInfo"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:background="?attr/selectableItemBackground">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_info" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Thông tin"
+                android:textSize="12sp"
+                android:textColor="#424242" />
+        </LinearLayout>
+
+        <!-- Nút Yêu thích -->
+        <LinearLayout
+            android:id="@+id/navFavorite"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:background="?attr/selectableItemBackground">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_heart" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Yêu thích"
+                android:textSize="12sp"
+                android:textColor="#424242" />
+        </LinearLayout>
+
+        <!-- Nút Cài đặt -->
+        <LinearLayout
+            android:id="@+id/navSettings"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:background="?attr/selectableItemBackground">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_setting" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Cài đặt"
+                android:textSize="12sp"
+                android:textColor="#424242" />
+        </LinearLayout>
+    </LinearLayout>
+
+</RelativeLayout>
