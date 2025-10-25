@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#FAFAFA"
-    tools:context=".ui.DetailActivity">
+    tools:context=".activity.MainActivity">
 
     <!-- 🔹 Thanh trên cùng -->
     <LinearLayout
@@ -66,7 +66,7 @@
                 android:layout_height="200dp"
                 android:layout_marginBottom="16dp"
                 android:scaleType="centerCrop"
-                android:src="@drawable/gallery"
+                android:src="@drawable/ic_image_placeholder"
                 android:background="@drawable/edittext_border"
                 android:clipToOutline="true"
                 android:elevation="4dp" />
