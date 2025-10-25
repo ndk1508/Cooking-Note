@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="80dp"
+    android:orientation="horizontal"
+    android:padding="8dp"
+    android:background="?attr/selectableItemBackground">
+
+    <ImageView
+        android:id="@+id/imgMonItem"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/gallery"
+        android:layout_marginEnd="12dp"
+        android:background="@drawable/edittext_border"/>
+
+    <TextView
+        android:id="@+id/tvTenMonItem"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical"
+        android:text="Tên món"
+        android:textSize="18sp"
+        android:textColor="#212121"
+        android:textStyle="bold"/>
+</LinearLayout>
