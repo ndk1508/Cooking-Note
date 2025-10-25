@@ -102,6 +102,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="56dp"
+        android:background="#7DB3E6"
         android:orientation="horizontal"
         android:gravity="center">
 
@@ -137,7 +138,7 @@
             <ImageView
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                android:src="@drawable/ic_heart" />
+                android:src="@drawable/ic_heart"/>
 
             <TextView
                 android:layout_height="wrap_content"
