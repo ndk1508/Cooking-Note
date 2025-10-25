@@ -11,6 +11,7 @@ import android.widget.*;
 
 import com.recipe.cookingnote.R;
 import com.recipe.cookingnote.database.DatabaseHelper;
+import com.recipe.cookingnote.model.MonAn;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -45,7 +46,7 @@ public class SuaMonAnActivity extends AppCompatActivity {
         // 🔹 Lấy ID món ăn từ Intent
         monAnId = getIntent().getIntExtra("MON_ID", -1);
         if (monAnId != -1) {
-            //loadThongTinMonAn(monAnId);
+            loadThongTinMonAn(monAnId);
         }
 
         // 🔹 Chọn ảnh
@@ -85,20 +86,20 @@ public class SuaMonAnActivity extends AppCompatActivity {
     // -----------------------------
     //  📦 Load dữ liệu món ăn cũ
     // -----------------------------
-//    private void loadThongTinMonAn(int id) {
-//            MonAn monAn = dbHelper.getMonAnById(id); // bạn cần có hàm này trong DatabaseHelper
-//        if (monAn != null) {
-//            edtTenMon.setText(monAn.getTenMon());
-//            edtNguyenLieu.setText(monAn.getNguyenLieu());
-//            edtBuocLam.setText(monAn.getBuocLam());
-//            // chọn danh mục trong Spinner nếu có
-//            if (monAn.getAnh() != null) {
-//                Bitmap bitmap = BitmapFactory.decodeByteArray(monAn.getAnh(), 0, monAn.getAnh().length);
-//                imgMonAn.setImageBitmap(bitmap);
-//                anhByte = monAn.getAnh();
-//            }
-//        }
-//    }
+    private void loadThongTinMonAn(int id) {
+            MonAn monAn = dbHelper.getMonAnById(id); // bạn cần có hàm này trong DatabaseHelper
+        if (monAn != null) {
+            edtTenMon.setText(monAn.getTenMon());
+            edtNguyenLieu.setText(monAn.getNguyenLieu());
+            edtBuocLam.setText(monAn.getBuocLam());
+            // chọn danh mục trong Spinner nếu có
+            if (monAn.getAnh() != null) {
+                Bitmap bitmap = BitmapFactory.decodeByteArray(monAn.getAnh(), 0, monAn.getAnh().length);
+                imgMonAn.setImageBitmap(bitmap);
+                anhByte = monAn.getAnh();
+            }
+        }
+    }
 
     // -----------------------------
     //  💾 Cập nhật món ăn
