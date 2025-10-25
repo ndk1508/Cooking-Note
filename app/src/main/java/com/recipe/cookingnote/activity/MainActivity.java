@@ -1,4 +1,4 @@
-package com.recipe.cookingnote;
+package com.recipe.cookingnote.activity;
 
 import android.content.Intent;
 import android.database.Cursor;
@@ -10,15 +10,15 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 
-import com.recipe.cookingnote.Model.MonAn;
-import com.recipe.cookingnote.Adapter.MonAnAdapter;
-import com.recipe.cookingnote.ThemMonAnActivity;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.recipe.cookingnote.R;
+import com.recipe.cookingnote.Adapter.MonAnAdapter;
 import com.recipe.cookingnote.database.DatabaseHelper;
+import com.recipe.cookingnote.Model.MonAn;
 
 import java.util.ArrayList;
 
@@ -70,8 +70,8 @@ public class MainActivity extends AppCompatActivity {
         btnClear.setOnClickListener(v -> edtSearch.setText(""));
 
         btnBreakfast.setOnClickListener(v -> filterCategory("Ăn sáng"));
-        btnLunch.setOnClickListener(v -> filterCategory("Món chính"));
-        btnDinner.setOnClickListener(v -> filterCategory("Tráng miệng"));
+        btnLunch.setOnClickListener(v -> filterCategory("Ăn trưa"));
+        btnDinner.setOnClickListener(v -> filterCategory("Ăn tối"));
 
         fabAdd.setOnClickListener(v -> {
             Intent intent = new Intent(MainActivity.this, ThemMonAnActivity.class);
@@ -87,10 +87,16 @@ public class MainActivity extends AppCompatActivity {
                 "FROM MonAn LEFT JOIN DanhMuc ON MonAn.idDanhMuc = DanhMuc.idDanhMuc";
 
         if (keyword != null && !keyword.isEmpty()) {
-            query += " WHERE MonAn.tenMon LIKE '%" + keyword + "%'";
+            query += " WHERE MonAn.tenMon LIKE ?";
         }
 
-        Cursor cursor = db.rawQuery(query, null);
+        Cursor cursor;
+        if (keyword != null && !keyword.isEmpty()) {
+            cursor = db.rawQuery(query, new String[]{"%" + keyword + "%"});
+        } else {
+            cursor = db.rawQuery(query, null);
+        }
+
         if (cursor.moveToFirst()) {
             do {
                 int id = cursor.getInt(0);

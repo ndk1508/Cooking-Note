@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
-
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.recipe.cookingnote">
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -12,8 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.CookingNote">
 
+        <!-- ✅ Màn hình chính -->
         <activity
-            android:name=".ThemMonAnActivity"
+            android:name=".activity.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -21,8 +22,9 @@
             </intent-filter>
         </activity>
 
-        <!-- Thêm AddRecipeActivity -->
-        <activity android:name=".ThemMonAnActivity" />
-
+        <!-- 🔹 Màn hình thêm món ăn -->
+        <activity
+            android:name=".activity.ThemMonAnActivity"
+            android:exported="false" />
     </application>
 </manifest>

@@ -24,14 +24,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("INSERT INTO DanhMuc (tenDanhMuc) VALUES ('Tráng miệng')");
 
         // 🔹 Tạo bảng MonAn
-        db.execSQL("CREATE TABLE MonAn (\n" +
-                "    idMonAn INTEGER PRIMARY KEY AUTOINCREMENT,\n" +
-                "    tenMon TEXT NOT NULL,\n" +
-                "    moTa TEXT,\n" +
-                "    anhMon TEXT,              -- \uD83D\uDD39 Thêm cột này để lưu URI ảnh\n" +
-                "    idDanhMuc INTEGER,\n" +
-                "    FOREIGN KEY(idDanhMuc) REFERENCES DanhMuc(idDanhMuc)\n" +
-                ");\n)");
+        db.execSQL("CREATE TABLE MonAn (" +
+                "idMonAn INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                "tenMon TEXT NOT NULL, " +
+                "moTa TEXT, " +
+                "anhMon TEXT, " +        // dùng để lưu URI ảnh
+                "idDanhMuc INTEGER, " +
+                "FOREIGN KEY(idDanhMuc) REFERENCES DanhMuc(idDanhMuc))");
 
         // 🔹 Tạo bảng NguyenLieu
         db.execSQL("CREATE TABLE NguyenLieu (" +

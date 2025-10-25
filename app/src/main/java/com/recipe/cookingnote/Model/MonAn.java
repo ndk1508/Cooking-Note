@@ -1,7 +1,14 @@
 package com.recipe.cookingnote.Model;
-public class MonAn {
+
+import java.io.Serializable;
+
+public class MonAn implements Serializable {
+
     private int id;
-    private String tenMon, moTa, anhMon, danhMuc;
+    private String tenMon;
+    private String moTa;
+    private String anhMon;
+    private String danhMuc;
 
     public MonAn(int id, String tenMon, String moTa, String anhMon, String danhMuc) {
         this.id = id;
@@ -16,4 +23,9 @@ public class MonAn {
     public String getMoTa() { return moTa; }
     public String getAnhMon() { return anhMon; }
     public String getDanhMuc() { return danhMuc; }
+
+    @Override
+    public String toString() {
+        return tenMon + " - " + danhMuc;
+    }
 }

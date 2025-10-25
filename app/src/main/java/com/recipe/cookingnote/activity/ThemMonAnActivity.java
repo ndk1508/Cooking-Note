@@ -1,4 +1,4 @@
-package com.recipe.cookingnote;
+package com.recipe.cookingnote.activity;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
@@ -6,14 +6,13 @@ import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.view.View;
 import android.widget.*;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.recipe.cookingnote.R;
 import com.recipe.cookingnote.database.DatabaseHelper;
-
 import java.util.ArrayList;
 
 public class ThemMonAnActivity extends AppCompatActivity {

@@ -12,7 +12,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.recipe.cookingnote.ThemMonAnActivity;
+import com.recipe.cookingnote.R;
+import com.recipe.cookingnote.activity.ThemMonAnActivity;
+import com.recipe.cookingnote.Model.MonAn;
 
 import java.util.ArrayList;
 
@@ -37,11 +39,11 @@ public class MonAnAdapter extends RecyclerView.Adapter<MonAnAdapter.MonAnViewHol
     public void onBindViewHolder(@NonNull MonAnViewHolder holder, int position) {
         MonAn mon = monAnList.get(position);
         holder.tvTenMon.setText(mon.getTenMon());
-        // Hiển thị ảnh nếu có
+
         if (mon.getAnhMon() != null && !mon.getAnhMon().isEmpty()) {
             holder.imgMon.setImageURI(Uri.parse(mon.getAnhMon()));
         } else {
-            holder.imgMon.setImageResource(R.drawable.gallery); // ảnh mặc định
+            holder.imgMon.setImageResource(R.drawable.ic_image_placeholder);
         }
 
         holder.itemView.setOnClickListener(v -> {
