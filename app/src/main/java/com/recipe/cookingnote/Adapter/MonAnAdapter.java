@@ -1,4 +1,4 @@
-package com.recipe.cookingnote.Adapter;
+package com.recipe.cookingnote.Adapter; // <-- Hãy chắc chắn đây là package của bạn
 
 import android.content.Context;
 import android.content.Intent;
@@ -8,13 +8,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.recipe.cookingnote.Model.MonAn; // <-- Class MonAn của bạn
 import com.recipe.cookingnote.R;
-import com.recipe.cookingnote.activity.ThemMonAnActivity;
-import com.recipe.cookingnote.Model.MonAn;
+import com.recipe.cookingnote.activity.ChiTietMonAnActivity;
 
 import java.util.ArrayList;
 
@@ -37,19 +36,36 @@ public class MonAnAdapter extends RecyclerView.Adapter<MonAnAdapter.MonAnViewHol
 
     @Override
     public void onBindViewHolder(@NonNull MonAnViewHolder holder, int position) {
-        MonAn mon = monAnList.get(position);
-        holder.tvTenMon.setText(mon.getTenMon());
+        // Lấy đối tượng MonAn hiện tại từ danh sách
+        MonAn currentMonAn = monAnList.get(position);
 
-        if (mon.getAnhMon() != null && !mon.getAnhMon().isEmpty()) {
-            holder.imgMon.setImageURI(Uri.parse(mon.getAnhMon()));
+        // Gán tên món ăn
+        holder.txtTenMon.setText(currentMonAn.getTenMon());
+
+        // Logic hiển thị ảnh thông minh
+        String anhPath = currentMonAn.getAnhMon();
+        if (anhPath != null && !anhPath.isEmpty()) {
+            try {
+                int resourceId = Integer.parseInt(anhPath);
+                holder.imgMonAn.setImageResource(resourceId);
+            } catch (NumberFormatException e) {
+                holder.imgMonAn.setImageURI(Uri.parse(anhPath));
+            }
         } else {
-            holder.imgMon.setImageResource(R.drawable.ic_image_placeholder);
+            holder.imgMonAn.setImageResource(R.drawable.ic_image_placeholder);
         }
 
-        holder.itemView.setOnClickListener(v -> {
-            Intent intent = new Intent(context, ThemMonAnActivity.class);
-            intent.putExtra("idMonAn", mon.getId());
-            context.startActivity(intent);
+        // Xử lý sự kiện khi người dùng click vào một món ăn
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, ChiTietMonAnActivity.class);
+
+                // Dòng này hoạt động tốt vì class MonAn của bạn đã có phương thức getId()
+                intent.putExtra(ChiTietMonAnActivity.EXTRA_MONAN_ID, currentMonAn.getId());
+
+                context.startActivity(intent);
+            }
         });
     }
 
@@ -58,14 +74,14 @@ public class MonAnAdapter extends RecyclerView.Adapter<MonAnAdapter.MonAnViewHol
         return monAnList.size();
     }
 
-    static class MonAnViewHolder extends RecyclerView.ViewHolder {
-        TextView tvTenMon;
-        ImageView imgMon;
+    public static class MonAnViewHolder extends RecyclerView.ViewHolder {
+        ImageView imgMonAn;
+        TextView txtTenMon;
 
         public MonAnViewHolder(@NonNull View itemView) {
             super(itemView);
-            tvTenMon = itemView.findViewById(R.id.tvTenMon);
-            imgMon = itemView.findViewById(R.id.imgMonAn);
+            imgMonAn = itemView.findViewById(R.id.imgMonAnItem);
+            txtTenMon = itemView.findViewById(R.id.txtTenMonItem);
         }
     }
 }

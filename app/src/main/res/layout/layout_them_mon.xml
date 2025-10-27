@@ -5,7 +5,6 @@
     android:orientation="vertical"
     android:background="@android:color/white">
 
-    <!-- 🔹 Thanh trên cùng -->
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="56dp"
@@ -32,7 +31,6 @@
             android:textStyle="bold" />
     </RelativeLayout>
 
-    <!-- 🔹 Nội dung chính -->
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -46,7 +44,6 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <!-- 🖼️ Ảnh món ăn -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -74,7 +71,6 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_marginBottom="20dp" />
 
-            <!-- 🔹 Các trường nhập -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -143,7 +139,6 @@
         </LinearLayout>
     </ScrollView>
 
-    <!-- 🔹 Nút Lưu (cố định trên menu) -->
     <Button
         android:id="@+id/btnLuu"
         android:layout_width="match_parent"
@@ -154,7 +149,6 @@
         android:layout_marginHorizontal="16dp"
         android:layout_marginVertical="8dp" />
 
-    <!-- 🔹 Thanh menu dưới -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="64dp"
@@ -164,7 +158,6 @@
         android:weightSum="3"
         android:elevation="6dp">
 
-        <!-- 3 nút menu -->
         <LinearLayout
             android:id="@+id/btnTrangChu"
             android:layout_width="0dp"
@@ -219,5 +212,4 @@
                 android:textSize="12sp" />
         </LinearLayout>
     </LinearLayout>
-
 </LinearLayout>

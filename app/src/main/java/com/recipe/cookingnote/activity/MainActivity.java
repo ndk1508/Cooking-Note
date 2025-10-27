@@ -39,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // Khởi tạo các view
         recyclerView = findViewById(R.id.recyclerView);
         edtSearch = findViewById(R.id.edtSearch);
         btnClear = findViewById(R.id.btnClear);
@@ -47,31 +48,35 @@ public class MainActivity extends AppCompatActivity {
         btnLunch = findViewById(R.id.btnLunch);
         btnDinner = findViewById(R.id.btnDinner);
 
+        // Khởi tạo database helper và list
         dbHelper = new DatabaseHelper(this);
         monAnList = new ArrayList<>();
 
+        // Cấu hình RecyclerView
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter = new MonAnAdapter(monAnList, this);
         recyclerView.setAdapter(adapter);
 
-        loadMonAn(null);
+        // <-- THAY ĐỔI 1: Không cần gọi hàm tải dữ liệu ở đây nữa
+        // loadDataFromDatabase(null, null);
 
+        // Thêm listener cho ô tìm kiếm
         edtSearch.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                loadMonAn(s.toString());
+                loadDataFromDatabase(s.toString(), null);
             }
             @Override
             public void afterTextChanged(Editable s) { }
         });
 
+        // Thêm listener cho các nút
         btnClear.setOnClickListener(v -> edtSearch.setText(""));
-
-        btnBreakfast.setOnClickListener(v -> filterCategory("Ăn sáng"));
-        btnLunch.setOnClickListener(v -> filterCategory("Ăn trưa"));
-        btnDinner.setOnClickListener(v -> filterCategory("Ăn tối"));
+        btnBreakfast.setOnClickListener(v -> loadDataFromDatabase(null, "Ăn sáng"));
+        btnLunch.setOnClickListener(v -> loadDataFromDatabase(null, "Ăn trưa"));
+        btnDinner.setOnClickListener(v -> loadDataFromDatabase(null, "Ăn tối"));
 
         fabAdd.setOnClickListener(v -> {
             Intent intent = new Intent(MainActivity.this, ThemMonAnActivity.class);
@@ -79,62 +84,85 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void loadMonAn(String keyword) {
+    // ⭐ THAY ĐỔI 2: THÊM PHƯƠNG THỨC onResume() ⭐
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // Tải lại dữ liệu mỗi khi màn hình này quay lại và hiển thị cho người dùng.
+        // Điều này đảm bảo danh sách luôn được cập nhật sau khi thêm, sửa, xóa.
+        loadDataFromDatabase(null, null);
+    }
+
+    /**
+     * Phương thức chung để tải dữ liệu từ cơ sở dữ liệu dựa trên từ khóa hoặc danh mục.
+     * @param keyword Từ khóa tìm kiếm (có thể là null).
+     * @param category Tên danh mục để lọc (có thể là null).
+     */
+    private void loadDataFromDatabase(String keyword, String category) {
         monAnList.clear();
         SQLiteDatabase db = dbHelper.getReadableDatabase();
+        Cursor cursor = null;
 
-        String query = "SELECT MonAn.idMonAn, MonAn.tenMon, MonAn.moTa, MonAn.anhMon, DanhMuc.tenDanhMuc " +
-                "FROM MonAn LEFT JOIN DanhMuc ON MonAn.idDanhMuc = DanhMuc.idDanhMuc";
+        try {
+            // Xây dựng câu truy vấn cơ bản
+            String query = "SELECT MonAn.idMonAn, MonAn.tenMon, MonAn.moTa, MonAn.anhMon, DanhMuc.tenDanhMuc " +
+                    "FROM MonAn LEFT JOIN DanhMuc ON MonAn.idDanhMuc = DanhMuc.idDanhMuc";
 
-        if (keyword != null && !keyword.isEmpty()) {
-            query += " WHERE MonAn.tenMon LIKE ?";
+            ArrayList<String> selectionArgs = new ArrayList<>();
+            String whereClause = ""; // Sử dụng tên biến rõ ràng hơn
+
+            // Thêm điều kiện tìm kiếm theo từ khóa
+            if (keyword != null && !keyword.isEmpty()) {
+                whereClause += " MonAn.tenMon LIKE ?";
+                selectionArgs.add("%" + keyword + "%");
+            }
+
+            // Thêm điều kiện lọc theo danh mục
+            if (category != null && !category.isEmpty()) {
+                if (!whereClause.isEmpty()) {
+                    whereClause += " AND";
+                }
+                whereClause += " DanhMuc.tenDanhMuc = ?";
+                selectionArgs.add(category);
+            }
+
+            if (!whereClause.isEmpty()) {
+                query += " WHERE" + whereClause;
+            }
+
+            // Thực thi truy vấn
+            cursor = db.rawQuery(query, selectionArgs.toArray(new String[0]));
+
+            if (cursor.moveToFirst()) {
+                do {
+                    int id = cursor.getInt(0);
+                    String ten = cursor.getString(1);
+                    String moTa = cursor.getString(2);
+                    String anh = cursor.getString(3);
+                    String danhMuc = cursor.getString(4);
+                    monAnList.add(new MonAn(id, ten, moTa, anh, danhMuc));
+                } while (cursor.moveToNext());
+            }
+        } finally {
+            // Luôn đóng cursor và database để tránh rò rỉ tài nguyên
+            if (cursor != null) {
+                cursor.close();
+            }
+            if (db != null && db.isOpen()) {
+                db.close();
+            }
         }
 
-        Cursor cursor;
-        if (keyword != null && !keyword.isEmpty()) {
-            cursor = db.rawQuery(query, new String[]{"%" + keyword + "%"});
-        } else {
-            cursor = db.rawQuery(query, null);
-        }
-
-        if (cursor.moveToFirst()) {
-            do {
-                int id = cursor.getInt(0);
-                String ten = cursor.getString(1);
-                String moTa = cursor.getString(2);
-                String anh = cursor.getString(3);
-                String danhMuc = cursor.getString(4);
-
-                monAnList.add(new MonAn(id, ten, moTa, anh, danhMuc));
-            } while (cursor.moveToNext());
-        }
-        cursor.close();
-
+        // Cập nhật lại adapter
         adapter.notifyDataSetChanged();
     }
 
-    private void filterCategory(String category) {
-        monAnList.clear();
-        SQLiteDatabase db = dbHelper.getReadableDatabase();
-
-        String query = "SELECT MonAn.idMonAn, MonAn.tenMon, MonAn.moTa, MonAn.anhMon, DanhMuc.tenDanhMuc " +
-                "FROM MonAn LEFT JOIN DanhMuc ON MonAn.idDanhMuc = DanhMuc.idDanhMuc " +
-                "WHERE DanhMuc.tenDanhMuc = ?";
-
-        Cursor cursor = db.rawQuery(query, new String[]{category});
-        if (cursor.moveToFirst()) {
-            do {
-                int id = cursor.getInt(0);
-                String ten = cursor.getString(1);
-                String moTa = cursor.getString(2);
-                String anh = cursor.getString(3);
-                String danhMuc = cursor.getString(4);
-
-                monAnList.add(new MonAn(id, ten, moTa, anh, danhMuc));
-            } while (cursor.moveToNext());
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        // Đóng database helper khi activity bị hủy
+        if (dbHelper != null) {
+            dbHelper.close();
         }
-        cursor.close();
-
-        adapter.notifyDataSetChanged();
     }
 }
