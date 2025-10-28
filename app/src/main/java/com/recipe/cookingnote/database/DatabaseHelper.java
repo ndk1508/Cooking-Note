@@ -103,5 +103,4 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                         "ORDER BY YeuThich.ngayThem DESC", null
         );
     }
-
 }

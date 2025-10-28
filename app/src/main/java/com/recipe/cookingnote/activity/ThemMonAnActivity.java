@@ -1,8 +1,7 @@
-package com.recipe.cookingnote.activity; // <-- Thay bằng package của bạn
+package com.recipe.cookingnote.activity;
 
 import android.Manifest;
 import android.content.ContentValues;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -17,7 +16,6 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -41,7 +39,6 @@ import java.util.List;
 
 public class ThemMonAnActivity extends AppCompatActivity {
 
-    // Key để nhận ID món ăn cần sửa từ ChiTietMonAnActivity
     public static final String EXTRA_EDIT_MONAN_ID = "EXTRA_EDIT_MONAN_ID";
 
     private EditText edtTenMon, edtNguyenLieu, edtBuocLam;
@@ -57,20 +54,27 @@ public class ThemMonAnActivity extends AppCompatActivity {
     private ArrayList<String> listDanhMuc = new ArrayList<>();
     private ArrayList<Integer> listIdDanhMuc = new ArrayList<>();
 
-    // Biến để xác định chế độ: -1 là THÊM, khác -1 là SỬA
     private int editingMonAnId = -1;
 
-    // Launcher để nhận ảnh từ thư viện
     private final ActivityResultLauncher<Intent> imagePickerLauncher =
             registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
-                if (result.getResultCode() == RESULT_OK && result.getData() != null) {
-                    selectedImageUri = result.getData().getData();
+                if (result.getResultCode() == RESULT_OK && result.getData() != null && result.getData().getData() != null) {
+
+                    Uri imageUri = result.getData().getData();
+
+                    try {
+                        final int takeFlags = Intent.FLAG_GRANT_READ_URI_PERMISSION;
+                        getContentResolver().takePersistableUriPermission(imageUri, takeFlags);
+                    } catch (SecurityException e) {
+                        e.printStackTrace();
+                        Toast.makeText(this, "Không thể lưu quyền truy cập ảnh", Toast.LENGTH_SHORT).show();
+                    }
+
+                    selectedImageUri = imageUri;
                     selectedImageResourceId = null;
                     imgMonAn.setImageURI(selectedImageUri);
                 }
             });
-
-    // Launcher để xin quyền truy cập bộ nhớ
     private final ActivityResultLauncher<String> requestPermissionLauncher =
             registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
                 if (isGranted) openGallery();
@@ -82,7 +86,6 @@ public class ThemMonAnActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_them_mon);
 
-        // Ánh xạ View
         edtTenMon = findViewById(R.id.edtTenMon);
         edtNguyenLieu = findViewById(R.id.edtNguyenLieu);
         edtBuocLam = findViewById(R.id.edtBuocLam);
@@ -91,18 +94,12 @@ public class ThemMonAnActivity extends AppCompatActivity {
         btnChonAnh = findViewById(R.id.btnChonAnh);
         imgMonAn = findViewById(R.id.imgMonAn);
         tvTieuDe = findViewById(R.id.tvTieuDe);
-        // 🔙 Nút quay lại
-        ImageButton btnback = findViewById(R.id.btnBack);
-        btnback.setOnClickListener(v -> finish());
 
         dbHelper = new DatabaseHelper(this);
         loadDanhMuc();
 
-        // KIỂM TRA CHẾ ĐỘ: THÊM MỚI HAY CHỈNH SỬA
         editingMonAnId = getIntent().getIntExtra(EXTRA_EDIT_MONAN_ID, -1);
-
         if (editingMonAnId != -1) {
-            // Đây là chế độ SỬA
             setupEditMode();
             loadDataForEditing(editingMonAnId);
         }
@@ -119,11 +116,9 @@ public class ThemMonAnActivity extends AppCompatActivity {
     private void loadDataForEditing(int id) {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         try {
-            // Tải thông tin cơ bản
             try (Cursor cursorMonAn = db.rawQuery("SELECT * FROM MonAn WHERE idMonAn = ?", new String[]{String.valueOf(id)})) {
                 if (cursorMonAn.moveToFirst()) {
                     edtTenMon.setText(cursorMonAn.getString(cursorMonAn.getColumnIndexOrThrow("tenMon")));
-
                     String anhPath = cursorMonAn.getString(cursorMonAn.getColumnIndexOrThrow("anhMon"));
                     if (anhPath != null && !anhPath.isEmpty()) {
                         try {
@@ -134,21 +129,16 @@ public class ThemMonAnActivity extends AppCompatActivity {
                             imgMonAn.setImageURI(selectedImageUri);
                         }
                     }
-
                     int idDanhMuc = cursorMonAn.getInt(cursorMonAn.getColumnIndexOrThrow("idDanhMuc"));
                     int spinnerPosition = listIdDanhMuc.indexOf(idDanhMuc);
                     if (spinnerPosition >= 0) spinnerDanhMuc.setSelection(spinnerPosition);
                 }
             }
-
-            // Tải nguyên liệu
             try (Cursor cursorNL = db.rawQuery("SELECT tenNguyenLieu FROM NguyenLieu WHERE idMonAn = ?", new String[]{String.valueOf(id)})) {
                 List<String> nguyenLieuList = new ArrayList<>();
                 while (cursorNL.moveToNext()) nguyenLieuList.add(cursorNL.getString(0));
                 edtNguyenLieu.setText(TextUtils.join("\n", nguyenLieuList));
             }
-
-            // Tải các bước làm
             try (Cursor cursorBL = db.rawQuery("SELECT moTaBuoc FROM BuocNau WHERE idMonAn = ? ORDER BY soThuTu ASC", new String[]{String.valueOf(id)})) {
                 List<String> buocLamList = new ArrayList<>();
                 while (cursorBL.moveToNext()) buocLamList.add(cursorBL.getString(0));
@@ -176,33 +166,25 @@ public class ThemMonAnActivity extends AppCompatActivity {
             ContentValues valuesMon = new ContentValues();
             valuesMon.put("tenMon", tenMon);
             valuesMon.put("idDanhMuc", listIdDanhMuc.get(indexDanhMuc));
-
             String anhPathToSave = "";
             if (selectedImageResourceId != null) anhPathToSave = String.valueOf(selectedImageResourceId);
             else if (selectedImageUri != null) anhPathToSave = selectedImageUri.toString();
             valuesMon.put("anhMon", anhPathToSave);
-
             long monAnIdForDetails;
             if (editingMonAnId != -1) {
-                // CHẾ ĐỘ SỬA: Dùng UPDATE
                 db.update("MonAn", valuesMon, "idMonAn = ?", new String[]{String.valueOf(editingMonAnId)});
                 monAnIdForDetails = editingMonAnId;
                 Toast.makeText(this, "Đã cập nhật món ăn!", Toast.LENGTH_SHORT).show();
             } else {
-                // CHẾ ĐỘ THÊM: Dùng INSERT
                 monAnIdForDetails = db.insert("MonAn", null, valuesMon);
                 if (monAnIdForDetails == -1) throw new Exception("Lỗi khi thêm món ăn!");
                 Toast.makeText(this, "Đã lưu món ăn thành công!", Toast.LENGTH_SHORT).show();
             }
-
-            // Xóa chi tiết cũ (nguyên liệu, bước làm) và thêm lại chi tiết mới
             db.delete("NguyenLieu", "idMonAn = ?", new String[]{String.valueOf(monAnIdForDetails)});
             db.delete("BuocNau", "idMonAn = ?", new String[]{String.valueOf(monAnIdForDetails)});
             insertDetails(db, monAnIdForDetails, nguyenLieu, buocLam);
-
             db.setTransactionSuccessful();
-            finish(); // Đóng màn hình sau khi lưu/cập nhật thành công
-
+            finish();
         } catch (Exception e) {
             Toast.makeText(this, "Lỗi: " + e.getMessage(), Toast.LENGTH_SHORT).show();
         } finally {
@@ -221,7 +203,6 @@ public class ThemMonAnActivity extends AppCompatActivity {
                 db.insert("NguyenLieu", null, values);
             }
         }
-
         String[] dsBuoc = buocLam.split("\\s*\\n+\\s*");
         int stt = 1;
         for (String item : dsBuoc) {
@@ -251,11 +232,9 @@ public class ThemMonAnActivity extends AppCompatActivity {
         View dialogView = getLayoutInflater().inflate(R.layout.dialog_chon_anh, null);
         builder.setView(dialogView);
         RecyclerView recyclerView = dialogView.findViewById(R.id.recyclerViewAnh);
-
         List<Integer> imageList = Arrays.asList(
-                R.drawable.bun_bo, R.drawable.banh_mi, R.drawable.com_ga, R.drawable.pho
+                R.drawable.bun_bo, R.drawable.banh_mi, R.drawable.com_ga, R.drawable.pho, R.drawable.kem
         );
-
         final AlertDialog dialog = builder.create();
         ChonAnhAdapter adapter = new ChonAnhAdapter(this, imageList, imageId -> {
             selectedImageResourceId = imageId;
@@ -277,7 +256,11 @@ public class ThemMonAnActivity extends AppCompatActivity {
     }
 
     private void openGallery() {
-        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        // ⭐ THAY ĐỔI NHỎ NHƯNG QUAN TRỌNG ⭐
+        // Sử dụng ACTION_OPEN_DOCUMENT thay vì ACTION_PICK
+        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        intent.setType("image/*"); // Chỉ hiển thị các loại ảnh
         imagePickerLauncher.launch(intent);
     }
 
