@@ -36,9 +36,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.CookingNote">
 
-        <!-- ✅ Màn hình chính (Màn hình khởi chạy) -->
+        <!-- 🔹 Màn hình Splash là Activity khởi động đầu tiên -->
         <activity
-            android:name=".activity.MainActivity"
+            android:name=".activity.SplashActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -46,19 +46,25 @@
             </intent-filter>
         </activity>
 
+        <!-- ✅ Thêm dòng này -->
+        <activity
+            android:name=".activity.MainActivity"
+            android:exported="true" />
+
+        <!-- 🔹 Màn hình yêu thích -->
+        <activity android:name=".activity.YeuThichActivity" />
+
         <!-- 🔹 Màn hình thêm món ăn -->
         <activity
             android:name=".activity.ThemMonAnActivity"
             android:exported="false" />
-        <!-- exported="false" là một cài đặt bảo mật tốt, giữ nguyên nó. -->
 
-        <!-- ⭐ MÀN HÌNH MỚI ĐÃ ĐƯỢC THÊM VÀO ĐÂY ⭐ -->
-        <!-- 📖 Màn hình chi tiết món ăn -->
+        <!-- 🔹 Màn hình chi tiết món ăn -->
         <activity
             android:name=".activity.ChiTietMonAnActivity"
             android:exported="false" />
 
-
     </application>
+
 
 </manifest>

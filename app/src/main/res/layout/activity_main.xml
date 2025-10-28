@@ -11,9 +11,9 @@
     <!-- 🔹 Thanh tiêu đề -->
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="56dp"
+        android:layout_height="50dp"
         android:orientation="horizontal"
-        android:background="#2196F3"
+        android:background="#A9DCFF"
         android:gravity="center"
         android:elevation="4dp">
 
@@ -67,41 +67,65 @@
             android:contentDescription="Xóa" />
     </LinearLayout>
 
-    <!-- 🔹 Danh mục món ăn -->
-    <LinearLayout
+    <!-- 🔹 Danh mục món ăn (cuộn ngang) -->
+    <HorizontalScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:orientation="horizontal"
+        android:scrollbars="none"
         android:layout_marginBottom="8dp">
 
-        <Button
-            android:id="@+id/btnBreakfast"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Ăn sáng"
-            android:backgroundTint="#64B5F6"
-            android:textColor="@android:color/white"
-            android:layout_margin="4dp"/>
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingHorizontal="8dp">
+            <Button
+                android:id="@+id/btnAll"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tất cả"
+                android:backgroundTint="#64B5F6"
+                android:textColor="@android:color/white"
+                android:layout_margin="4dp"/>
 
-        <Button
-            android:id="@+id/btnLunch"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Ăn trưa"
-            android:backgroundTint="#42A5F5"
-            android:textColor="@android:color/white"
-            android:layout_margin="4dp"/>
+            <Button
+                android:id="@+id/btnBreakfast"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Ăn sáng"
+                android:backgroundTint="#64B5F6"
+                android:textColor="@android:color/white"
+                android:layout_margin="4dp"/>
 
-        <Button
-            android:id="@+id/btnDinner"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Ăn tối"
-            android:backgroundTint="#1E88E5"
-            android:textColor="@android:color/white"
-            android:layout_margin="4dp"/>
-    </LinearLayout>
+            <Button
+                android:id="@+id/btnLunch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Ăn trưa"
+                android:backgroundTint="#64B5F6"
+                android:textColor="@android:color/white"
+                android:layout_margin="4dp"/>
+
+            <Button
+                android:id="@+id/btnDinner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Ăn tối"
+                android:backgroundTint="#64B5F6"
+                android:textColor="@android:color/white"
+                android:layout_margin="4dp"/>
+
+            <Button
+                android:id="@+id/btnDessert"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tráng miệng"
+                android:backgroundTint="#64B5F6"
+                android:textColor="@android:color/white"
+                android:layout_margin="4dp"/>
+        </LinearLayout>
+    </HorizontalScrollView>
 
     <!-- 🔹 Tiêu đề danh sách -->
     <TextView
@@ -162,15 +186,17 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/btnFavorites"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:orientation="vertical"
             android:gravity="center">
+
             <ImageView
-                android:layout_width="24dp"
+                android:layout_width="23dp"
                 android:layout_height="24dp"
-                android:src="@drawable/ic_heart"/>
+                android:src="@drawable/ic_heart" />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -178,6 +204,7 @@
                 android:textSize="12sp"
                 android:textColor="#000000"/>
         </LinearLayout>
+
 
         <LinearLayout
             android:layout_width="0dp"

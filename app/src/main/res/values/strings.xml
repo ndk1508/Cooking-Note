@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Cooking Note</string>
+    <string name="favorite">Yêu thích</string>
+
 </resources>

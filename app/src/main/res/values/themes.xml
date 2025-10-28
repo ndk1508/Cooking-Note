@@ -1,8 +1,16 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
+
+    <!-- Base application theme -->
     <style name="Base.Theme.CookingNote" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <!-- ✅ Đặt màu chủ đạo cho app -->
+        <item name="colorPrimary">@color/primary_blue</item>
+        <item name="colorPrimaryContainer">@color/primary_blue</item>
+
+        <!-- ✅ Đặt màu cho status bar (phần bị tím ở trên cùng) -->
+        <item name="android:statusBarColor">@color/primary_blue</item>
+
+        <!-- Nếu status bar nền đậm, để false để icon vẫn sáng -->
+        <item name="android:windowLightStatusBar">false</item>
     </style>
 
     <style name="Theme.CookingNote" parent="Base.Theme.CookingNote" />

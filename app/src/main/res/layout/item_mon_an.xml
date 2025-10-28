@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
+    android:background="@drawable/edittext_border"
     android:padding="8dp"
-    android:layout_marginBottom="8dp"
-    android:background="@drawable/edittext_border">
+    android:layout_marginBottom="8dp">
 
+    <!-- Ảnh món ăn -->
     <ImageView
         android:id="@+id/imgMonAnItem"
         android:layout_width="match_parent"
         android:layout_height="150dp"
         android:scaleType="centerCrop"
         android:src="@drawable/ic_image_placeholder" />
-
+    <!-- Tên món ăn -->
     <TextView
         android:id="@+id/txtTenMonItem"
         android:layout_width="wrap_content"
@@ -22,8 +22,9 @@
         android:textSize="18sp"
         android:textStyle="bold"
         android:textColor="@android:color/black"
-        android:layout_marginTop="8dp"/>
+        android:layout_below="@id/imgMonAnItem"
+        android:layout_marginTop="8dp" />
 
-    <!-- Bạn có thể thêm các TextView khác cho mô tả hoặc danh mục ở đây -->
 
-</LinearLayout>
+
+</RelativeLayout>

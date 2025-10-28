@@ -1,5 +1,6 @@
 package com.recipe.cookingnote.database;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
@@ -31,6 +32,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "moTa TEXT, " +
                 "anhMon TEXT, " +        // dùng để lưu URI ảnh
                 "idDanhMuc INTEGER, " +
+                "yeuThich INTEGER DEFAULT 0, " +
                 "FOREIGN KEY(idDanhMuc) REFERENCES DanhMuc(idDanhMuc))");
 
         // 🔹 Tạo bảng NguyenLieu
@@ -66,5 +68,40 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS MonAn");
         db.execSQL("DROP TABLE IF EXISTS DanhMuc");
         onCreate(db);
+
     }
+    // 🔹 Thêm món vào danh sách yêu thích
+    public void themYeuThich(int idMonAn) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("INSERT INTO YeuThich (idMonAn) VALUES (" + idMonAn + ")");
+        db.close();
+    }
+
+    // 🔹 Xóa món khỏi danh sách yêu thích
+    public void xoaYeuThich(int idMonAn) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("DELETE FROM YeuThich WHERE idMonAn = " + idMonAn);
+        db.close();
+    }
+
+    // 🔹 Kiểm tra xem món ăn có nằm trong danh sách yêu thích hay không
+    public boolean laYeuThich(int idMonAn) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM YeuThich WHERE idMonAn = " + idMonAn, null);
+        boolean tonTai = cursor.moveToFirst();
+        cursor.close();
+        return tonTai;
+    }
+
+    // 🔹 Lấy danh sách món ăn yêu thích (JOIN MonAn + YeuThich)
+    public Cursor layDanhSachYeuThich() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        return db.rawQuery(
+                "SELECT MonAn.idMonAn, MonAn.tenMon, MonAn.moTa, MonAn.anhMon " +
+                        "FROM MonAn " +
+                        "INNER JOIN YeuThich ON MonAn.idMonAn = YeuThich.idMonAn " +
+                        "ORDER BY YeuThich.ngayThem DESC", null
+        );
+    }
+
 }

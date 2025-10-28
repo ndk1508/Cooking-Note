@@ -34,35 +34,87 @@ public class ChiTietMonAnActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // SỬA LỖI 1: Thiếu dấu ")" và tên layout chưa đúng
         setContentView(R.layout.layout_chi_tiet);
 
-        // Ánh xạ View theo ID trong layout mới
+        // Ánh xạ View
         imgChiTiet = findViewById(R.id.imgChiTiet);
         txtTenMonChiTiet = findViewById(R.id.txtTenMonChiTiet);
         txtNguyenLieuChiTiet = findViewById(R.id.txtNguyenLieuChiTiet);
         txtBuocLamChiTiet = findViewById(R.id.txtBuocLamChiTiet);
-        btnSua = findViewById(R.id.btnSua);       // SỬA LỖI 2: Ánh xạ đúng ID
+        btnSua = findViewById(R.id.btnSua);
         btnXoa = findViewById(R.id.btnXoa);
         btnBack = findViewById(R.id.btnBack);
+        ImageButton btnFavorite = findViewById(R.id.btnFavorite);
 
+        // ✅ Khởi tạo DatabaseHelper TRƯỚC khi truy cập database
         dbHelper = new DatabaseHelper(this);
 
+        // Lấy ID món ăn được truyền qua
         currentMonAnId = getIntent().getIntExtra(EXTRA_MONAN_ID, -1);
 
-        // Gán sự kiện click cho các nút
-        btnBack.setOnClickListener(v -> finish()); // Nút quay lại
+        // Nếu không có ID thì thoát
+        if (currentMonAnId == -1) {
+            Toast.makeText(this, "Không tìm thấy món ăn!", Toast.LENGTH_SHORT).show();
+            finish();
+            return;
+        }
 
+        // ✅ Kiểm tra xem món này đã được yêu thích chưa
+        SQLiteDatabase dbCheck = dbHelper.getReadableDatabase();
+        Cursor cursorCheck = dbCheck.rawQuery(
+                "SELECT idMonAn FROM YeuThich WHERE idMonAn = ?",
+                new String[]{String.valueOf(currentMonAnId)}
+        );
+        if (cursorCheck.moveToFirst()) {
+            btnFavorite.setImageResource(R.drawable.ic_heart); // tim đầy
+        } else {
+            btnFavorite.setImageResource(R.drawable.ic_heart_hollow); // tim rỗng
+        }
+        cursorCheck.close();
+        dbCheck.close();
+
+        // 🔙 Nút quay lại
+        btnBack.setOnClickListener(v -> finish());
+
+        // ✏️ Nút sửa
         btnSua.setOnClickListener(v -> {
             Intent intent = new Intent(ChiTietMonAnActivity.this, ThemMonAnActivity.class);
             intent.putExtra(ThemMonAnActivity.EXTRA_EDIT_MONAN_ID, currentMonAnId);
             startActivity(intent);
         });
 
-        btnXoa.setOnClickListener(v -> {
-            showDeleteConfirmDialog();
+        // 🗑️ Nút xóa
+        btnXoa.setOnClickListener(v -> showDeleteConfirmDialog());
+
+        // ❤️ Nút yêu thích
+        btnFavorite.setOnClickListener(v -> {
+            SQLiteDatabase db = dbHelper.getWritableDatabase();
+            try {
+                Cursor cursor = db.rawQuery(
+                        "SELECT idMonAn FROM YeuThich WHERE idMonAn = ?",
+                        new String[]{String.valueOf(currentMonAnId)}
+                );
+                if (cursor.moveToFirst()) {
+                    // Nếu đã yêu thích → Xóa
+                    db.delete("YeuThich", "idMonAn = ?", new String[]{String.valueOf(currentMonAnId)});
+                    btnFavorite.setImageResource(R.drawable.ic_heart_hollow);
+                    Toast.makeText(this, "Đã xóa khỏi yêu thích", Toast.LENGTH_SHORT).show();
+                } else {
+                    // Nếu chưa → Thêm
+                    db.execSQL("INSERT INTO YeuThich (idMonAn) VALUES (?)",
+                            new Object[]{currentMonAnId});
+                    btnFavorite.setImageResource(R.drawable.ic_heart);
+                    Toast.makeText(this, "Đã thêm vào yêu thích", Toast.LENGTH_SHORT).show();
+                }
+                cursor.close();
+            } catch (Exception e) {
+                Toast.makeText(this, "Lỗi khi thêm vào yêu thích!", Toast.LENGTH_SHORT).show();
+            } finally {
+                db.close();
+            }
         });
     }
+
 
     @Override
     protected void onResume() {

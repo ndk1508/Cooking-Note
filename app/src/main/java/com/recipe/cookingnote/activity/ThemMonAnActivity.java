@@ -17,6 +17,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -90,6 +91,9 @@ public class ThemMonAnActivity extends AppCompatActivity {
         btnChonAnh = findViewById(R.id.btnChonAnh);
         imgMonAn = findViewById(R.id.imgMonAn);
         tvTieuDe = findViewById(R.id.tvTieuDe);
+        // 🔙 Nút quay lại
+        ImageButton btnback = findViewById(R.id.btnBack);
+        btnback.setOnClickListener(v -> finish());
 
         dbHelper = new DatabaseHelper(this);
         loadDanhMuc();

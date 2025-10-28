@@ -9,6 +9,7 @@ import android.text.TextWatcher;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -28,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
     private EditText edtSearch;
     private ImageButton btnClear;
     private FloatingActionButton fabAdd;
-    private Button btnBreakfast, btnLunch, btnDinner;
+    private Button btnBreakfast, btnLunch, btnDinner, btnDessert, btnAll;
 
     private DatabaseHelper dbHelper;
     private ArrayList<MonAn> monAnList;
@@ -44,9 +45,12 @@ public class MainActivity extends AppCompatActivity {
         edtSearch = findViewById(R.id.edtSearch);
         btnClear = findViewById(R.id.btnClear);
         fabAdd = findViewById(R.id.fabAdd);
+        btnAll = findViewById(R.id.btnAll);
         btnBreakfast = findViewById(R.id.btnBreakfast);
         btnLunch = findViewById(R.id.btnLunch);
         btnDinner = findViewById(R.id.btnDinner);
+        btnDessert = findViewById(R.id.btnDessert);
+        LinearLayout btnFavorites = findViewById(R.id.btnFavorites);
 
         // Khởi tạo database helper và list
         dbHelper = new DatabaseHelper(this);
@@ -56,7 +60,6 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter = new MonAnAdapter(monAnList, this);
         recyclerView.setAdapter(adapter);
-
         // <-- THAY ĐỔI 1: Không cần gọi hàm tải dữ liệu ở đây nữa
         // loadDataFromDatabase(null, null);
 
@@ -73,15 +76,23 @@ public class MainActivity extends AppCompatActivity {
         });
 
         // Thêm listener cho các nút
+        btnAll.setOnClickListener(v -> loadDataFromDatabase(null, null));
         btnClear.setOnClickListener(v -> edtSearch.setText(""));
         btnBreakfast.setOnClickListener(v -> loadDataFromDatabase(null, "Ăn sáng"));
         btnLunch.setOnClickListener(v -> loadDataFromDatabase(null, "Ăn trưa"));
         btnDinner.setOnClickListener(v -> loadDataFromDatabase(null, "Ăn tối"));
 
+        btnDessert.setOnClickListener(v -> loadDataFromDatabase(null, "Tráng miệng"));
+        btnFavorites.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, YeuThichActivity.class);
+            startActivity(intent);
+        });
+
         fabAdd.setOnClickListener(v -> {
             Intent intent = new Intent(MainActivity.this, ThemMonAnActivity.class);
             startActivity(intent);
         });
+
     }
 
     // ⭐ THAY ĐỔI 2: THÊM PHƯƠNG THỨC onResume() ⭐

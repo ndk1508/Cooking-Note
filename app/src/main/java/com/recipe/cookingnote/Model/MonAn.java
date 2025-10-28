@@ -9,6 +9,7 @@ public class MonAn implements Serializable {
     private String moTa;
     private String anhMon;
     private String danhMuc;
+    private boolean yeuThich;
 
     public MonAn(int id, String tenMon, String moTa, String anhMon, String danhMuc) {
         this.id = id;
@@ -27,5 +28,12 @@ public class MonAn implements Serializable {
     @Override
     public String toString() {
         return tenMon + " - " + danhMuc;
+    }
+    public boolean isYeuThich() {
+        return yeuThich;
+    }
+
+    public void setYeuThich(boolean yeuThich) {
+        this.yeuThich = yeuThich;
     }
 }

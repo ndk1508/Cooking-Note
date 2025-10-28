@@ -73,100 +73,16 @@
     </LinearLayout>
 
     <!-- 🔹 Danh sách món yêu thích -->
-    <ScrollView
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerYeuThich"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:paddingHorizontal="8dp">
+        android:padding="8dp" />
 
-        <LinearLayout
-            android:id="@+id/containerMonAn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingBottom="8dp" />
 
-    </ScrollView>
 
-    <!-- 🔹 Nút thêm món mới (floating button) -->
-    <ImageButton
-        android:id="@+id/btnThemMon"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:layout_gravity="end|bottom"
-        android:layout_margin="16dp"
-        android:background="@drawable/btn_plus"
-        android:elevation="6dp" />
 
-    <!-- 🔹 Thanh điều hướng dưới -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:background="#7DB3E6"
-        android:orientation="horizontal"
-        android:gravity="center">
 
-        <!-- Nút Thông tin -->
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:orientation="vertical"
-            android:gravity="center">
-
-            <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:src="@drawable/ic_info"/>
-
-            <TextView
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                android:text="Thông tin"
-                android:textSize="12sp"
-                android:textColor="#000000" />
-        </LinearLayout>
-
-        <!-- Nút Món ăn yêu thích -->
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:orientation="vertical"
-            android:gravity="center">
-
-            <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:src="@drawable/ic_heart"/>
-
-            <TextView
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                android:text="Món ăn yêu thích"
-                android:textSize="12sp"/>
-        </LinearLayout>
-
-        <!-- Nút Cài đặt -->
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:orientation="vertical"
-            android:gravity="center">
-
-            <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:src="@drawable/ic_setting" />
-
-            <TextView
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                android:text="Cài đặt"
-                android:textSize="12sp"
-                android:textColor="#000000" />
-        </LinearLayout>
-    </LinearLayout>
 
 </LinearLayout>
