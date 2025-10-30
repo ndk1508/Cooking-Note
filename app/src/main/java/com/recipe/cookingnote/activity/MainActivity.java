@@ -9,6 +9,7 @@ import android.text.TextWatcher;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -51,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
         btnLunch = findViewById(R.id.btnLunch);
         btnDinner = findViewById(R.id.btnDinner);
         btnDessert = findViewById(R.id.btnDessert);
+        ImageView btnThongTin = findViewById(R.id.btnThongTin);
         LinearLayout btnFavorites = findViewById(R.id.btnFavorites);
 
         // 🔹 Khởi tạo database helper và danh sách món ăn
@@ -80,6 +82,11 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) { }
+        });
+        // Nút thông tin
+        btnThongTin.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, ThongTinActivity.class);
+            startActivity(intent);
         });
 
         // 🔹 Xử lý sự kiện nhấn nút “Tất cả”
