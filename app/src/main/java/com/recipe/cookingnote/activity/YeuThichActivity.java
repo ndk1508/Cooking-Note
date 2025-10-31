@@ -16,20 +16,7 @@ import com.recipe.cookingnote.database.DatabaseHelper;
 
 import java.util.ArrayList;
 
-/**
- * YeuThichActivity
- * -----------------------
- * Màn hình hiển thị danh sách các món ăn mà người dùng đã đánh dấu "Yêu thích".
- *
- * Giao diện: layout_mon_yeu_thich.xml
- *  - RecyclerView: hiển thị danh sách món ăn yêu thích (id: recyclerYeuThich)
- *  - ImageButton: nút quay lại (id: btnBack)
- *
- * Nguyên lý hoạt động:
- *  - Khi mở màn hình: truy vấn dữ liệu yêu thích từ SQLite và hiển thị bằng RecyclerView.
- *  - Khi người dùng quay lại từ màn chi tiết món ăn (sau khi bỏ yêu thích),
- *    onResume() sẽ tự động tải lại danh sách từ DB để cập nhật UI.
- */
+
 public class YeuThichActivity extends AppCompatActivity {
 
     // RecyclerView hiển thị danh sách món ăn yêu thích
@@ -69,11 +56,6 @@ public class YeuThichActivity extends AppCompatActivity {
         // --- Sự kiện quay lại ---
         btnBackYeuThich.setOnClickListener(v -> finish());
     }
-
-    /**
-     * Khi quay lại màn hình này (ví dụ sau khi xóa món khỏi yêu thích ở màn chi tiết),
-     * hệ thống sẽ gọi lại onResume(). Ta tận dụng để tải lại danh sách mới nhất.
-     */
     @Override
     protected void onResume() {
         super.onResume();
@@ -85,15 +67,6 @@ public class YeuThichActivity extends AppCompatActivity {
         // Cập nhật giao diện
         adapter.notifyDataSetChanged();
     }
-
-    /**
-     * Lấy danh sách món ăn yêu thích từ SQLite.
-     *
-     * Cách hoạt động:
-     *  - Mở cơ sở dữ liệu đọc.
-     *  - JOIN bảng MonAn và bảng YeuThich theo idMonAn.
-     *  - Lặp qua kết quả truy vấn và chuyển sang danh sách MonAn.
-     */
     private ArrayList<MonAn> getMonAnYeuThich() {
         ArrayList<MonAn> ds = new ArrayList<>();
 
