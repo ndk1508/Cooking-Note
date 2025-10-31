@@ -1,4 +1,4 @@
-package com.recipe.cookingnote.Adapter; // Thay bằng tên package của bạn
+package com.recipe.cookingnote.Adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-import com.recipe.cookingnote.R; // Thay bằng tên package của bạn
+import com.recipe.cookingnote.R;
 import java.util.List;
 
 /**

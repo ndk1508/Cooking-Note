@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // 🔹 Ánh xạ các thành phần giao diện (View) từ layout XML
+        // Ánh xạ các thành phần giao diện (View) từ layout XML
         recyclerView = findViewById(R.id.recyclerView);
         edtSearch = findViewById(R.id.edtSearch);
         btnClear = findViewById(R.id.btnClear);
@@ -55,26 +55,23 @@ public class MainActivity extends AppCompatActivity {
         ImageView btnThongTin = findViewById(R.id.btnThongTin);
         LinearLayout btnFavorites = findViewById(R.id.btnFavorites);
 
-        // 🔹 Khởi tạo database helper và danh sách món ăn
+        // Khởi tạo database helper và danh sách món ăn
         dbHelper = new DatabaseHelper(this);
         monAnList = new ArrayList<>();
 
-        // 🔹 Thiết lập RecyclerView hiển thị theo dạng danh sách dọc
+        // Thiết lập RecyclerView hiển thị theo dạng danh sách dọc
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        // 🔹 Gắn adapter để điều khiển hiển thị dữ liệu lên RecyclerView
+        // Gắn adapter để điều khiển hiển thị dữ liệu lên RecyclerView
         adapter = new MonAnAdapter(monAnList, this);
         recyclerView.setAdapter(adapter);
 
-        // ❌ Không cần tải dữ liệu ngay khi khởi tạo — vì sẽ tự động tải trong onResume()
-        // loadDataFromDatabase(null, null);
-
-        // 🔹 Lắng nghe sự thay đổi trong ô tìm kiếm
+        // sự thay đổi trong ô tìm kiếm
         edtSearch.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
 
-            // ✅ Khi người dùng nhập vào ô tìm kiếm → lọc dữ liệu theo từ khóa
+            // Khi người dùng nhập vào ô tìm kiếm → lọc dữ liệu theo từ khóa
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 loadDataFromDatabase(s.toString(), null);
@@ -89,41 +86,37 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
-        // 🔹 Xử lý sự kiện nhấn nút “Tất cả”
         btnAll.setOnClickListener(v -> loadDataFromDatabase(null, null));
 
-        // 🔹 Nút “X” để xóa nội dung tìm kiếm
         btnClear.setOnClickListener(v -> edtSearch.setText(""));
 
-        // 🔹 Các nút lọc theo danh mục
         btnBreakfast.setOnClickListener(v -> loadDataFromDatabase(null, "Ăn sáng"));
         btnLunch.setOnClickListener(v -> loadDataFromDatabase(null, "Ăn trưa"));
         btnDinner.setOnClickListener(v -> loadDataFromDatabase(null, "Ăn tối"));
         btnDessert.setOnClickListener(v -> loadDataFromDatabase(null, "Tráng miệng"));
 
-        // 🔹 Nút mở trang “Danh sách yêu thích”
+
         btnFavorites.setOnClickListener(v -> {
             Intent intent = new Intent(MainActivity.this, YeuThichActivity.class);
             startActivity(intent);
         });
 
-        // 🔹 Nút “+” để thêm món ăn mới
         fabAdd.setOnClickListener(v -> {
             Intent intent = new Intent(MainActivity.this, ThemMonAnActivity.class);
             startActivity(intent);
         });
     }
 
-    // ⭐ Phương thức onResume() — chạy mỗi khi màn hình chính hiển thị lại
+    // Phương thức onResume() — chạy mỗi khi màn hình chính hiển thị lại
     @Override
     protected void onResume() {
         super.onResume();
-        // ✅ Luôn tải lại dữ liệu mới nhất (sau khi thêm, sửa, xóa món ăn)
+        // Luôn tải lại dữ liệu mới nhất (sau khi thêm, sửa, xóa món ăn)
         loadDataFromDatabase(null, null);
     }
 
     /**
-     * 📦 Phương thức tải dữ liệu từ SQLite và hiển thị lên RecyclerView.
+     * Phương thức tải dữ liệu từ SQLite và hiển thị lên RecyclerView.
      * @param keyword  Từ khóa tìm kiếm (có thể null)
      * @param category Tên danh mục cần lọc (có thể null)
      */
@@ -133,20 +126,20 @@ public class MainActivity extends AppCompatActivity {
         Cursor cursor = null;
 
         try {
-            // 🔹 Câu truy vấn cơ bản kết hợp bảng MonAn và DanhMuc
+            // Câu truy vấn cơ bản kết hợp bảng MonAn và DanhMuc
             String query = "SELECT MonAn.idMonAn, MonAn.tenMon, MonAn.moTa, MonAn.anhMon, DanhMuc.tenDanhMuc " +
                     "FROM MonAn LEFT JOIN DanhMuc ON MonAn.idDanhMuc = DanhMuc.idDanhMuc";
 
             ArrayList<String> selectionArgs = new ArrayList<>();
             String whereClause = "";
 
-            // 🔹 Nếu có từ khóa tìm kiếm → thêm điều kiện LIKE
+            // Nếu có từ khóa tìm kiếm → thêm điều kiện LIKE
             if (keyword != null && !keyword.isEmpty()) {
                 whereClause += " MonAn.tenMon LIKE ?";
                 selectionArgs.add("%" + keyword + "%");
             }
 
-            // 🔹 Nếu có danh mục lọc → thêm điều kiện AND
+            // Nếu có danh mục lọc → thêm điều kiện AND
             if (category != null && !category.isEmpty()) {
                 if (!whereClause.isEmpty()) {
                     whereClause += " AND";
@@ -155,15 +148,15 @@ public class MainActivity extends AppCompatActivity {
                 selectionArgs.add(category);
             }
 
-            // 🔹 Nếu có điều kiện → nối WHERE vào câu truy vấn
+            // Nếu có điều kiện → nối WHERE vào câu truy vấn
             if (!whereClause.isEmpty()) {
                 query += " WHERE" + whereClause;
             }
 
-            // 🔹 Thực thi truy vấn
+            // Thực thi truy vấn
             cursor = db.rawQuery(query, selectionArgs.toArray(new String[0]));
 
-            // 🔹 Duyệt kết quả và thêm vào danh sách
+            // Duyệt kết quả và thêm vào danh sách
             if (cursor.moveToFirst()) {
                 do {
                     int id = cursor.getInt(0);
@@ -172,24 +165,24 @@ public class MainActivity extends AppCompatActivity {
                     String anh = cursor.getString(3);
                     String danhMuc = cursor.getString(4);
 
-                    // ✅ Thêm món ăn vào danh sách
+                    //  Thêm món ăn vào danh sách
                     monAnList.add(new MonAn(id, ten, moTa, anh, danhMuc));
                 } while (cursor.moveToNext());
             }
         } finally {
-            // 🔹 Đảm bảo đóng Cursor & Database để tránh rò rỉ bộ nhớ
+            //  Đảm bảo đóng Cursor & Database để tránh rò rỉ bộ nhớ
             if (cursor != null) cursor.close();
             if (db != null && db.isOpen()) db.close();
         }
 
-        // 🔹 Cập nhật lại giao diện danh sách
+        // Cập nhật lại giao diện danh sách
         adapter.notifyDataSetChanged();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        // 🔹 Đóng kết nối DatabaseHelper khi Activity bị hủy
+        //  Đóng kết nối DatabaseHelper khi Activity bị hủy
         if (dbHelper != null) {
             dbHelper.close();
         }

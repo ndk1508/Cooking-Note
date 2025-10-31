@@ -1,4 +1,4 @@
-package com.recipe.cookingnote.Adapter; // <-- Hãy chắc chắn đây là package của bạn
+package com.recipe.cookingnote.Adapter;
 
 import android.content.Context;
 import android.content.Intent;
@@ -12,21 +12,12 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.recipe.cookingnote.Model.MonAn; // <-- Class MonAn của bạn
+import com.recipe.cookingnote.Model.MonAn;
 import com.recipe.cookingnote.R;
 import com.recipe.cookingnote.activity.ChiTietMonAnActivity;
 
 import java.util.ArrayList;
 
-/**
- * Adapter cho RecyclerView hiển thị danh sách món ăn trong ứng dụng.
- *
- * Mỗi item bao gồm:
- * - Ảnh món ăn (có thể từ drawable hoặc URI trong thư viện)
- * - Tên món ăn
- *
- * Khi người dùng bấm vào một item, ứng dụng sẽ mở ChiTietMonAnActivity để xem chi tiết.
- */
 public class MonAnAdapter extends RecyclerView.Adapter<MonAnAdapter.MonAnViewHolder> {
 
     private ArrayList<MonAn> monAnList; // Danh sách các món ăn
@@ -60,7 +51,7 @@ public class MonAnAdapter extends RecyclerView.Adapter<MonAnAdapter.MonAnViewHol
         // Gán tên món ăn
         holder.txtTenMon.setText(currentMonAn.getTenMon());
 
-        // ✅ Hiển thị ảnh món ăn
+        // Hiển thị ảnh món ăn
         String anhPath = currentMonAn.getAnhMon();
 
         if (anhPath != null && !anhPath.isEmpty()) {
@@ -77,14 +68,13 @@ public class MonAnAdapter extends RecyclerView.Adapter<MonAnAdapter.MonAnViewHol
             holder.imgMonAn.setImageResource(R.drawable.ic_image_placeholder);
         }
 
-        // ✅ Khi người dùng bấm vào món ăn → mở trang chi tiết
+        // Khi người dùng bấm vào món ăn → mở trang chi tiết
         holder.itemView.setOnClickListener(v -> {
             Intent intent = new Intent(context, ChiTietMonAnActivity.class);
             intent.putExtra(ChiTietMonAnActivity.EXTRA_MONAN_ID, currentMonAn.getId()); // Gửi ID món ăn sang Activity chi tiết
             context.startActivity(intent);
         });
     }
-
     /**
      * Trả về số lượng item trong danh sách
      */
@@ -92,7 +82,6 @@ public class MonAnAdapter extends RecyclerView.Adapter<MonAnAdapter.MonAnViewHol
     public int getItemCount() {
         return monAnList.size();
     }
-
     /**
      * ViewHolder giữ tham chiếu đến các View trong layout item_mon_an.xml
      */

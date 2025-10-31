@@ -39,7 +39,7 @@ import java.util.List;
 
 public class ThemMonAnActivity extends AppCompatActivity {
 
-    public static final String EXTRA_EDIT_MONAN_ID = "EXTRA_EDIT_MONAN_ID"; // ✅ Key truyền id món ăn khi chỉnh sửa
+    public static final String EXTRA_EDIT_MONAN_ID = "EXTRA_EDIT_MONAN_ID";
 
     // Các view trong layout
     private EditText edtTenMon, edtNguyenLieu, edtBuocLam;
@@ -56,9 +56,9 @@ public class ThemMonAnActivity extends AppCompatActivity {
     private ArrayList<String> listDanhMuc = new ArrayList<>();
     private ArrayList<Integer> listIdDanhMuc = new ArrayList<>();
 
-    private int editingMonAnId = -1; // ✅ Biến kiểm tra đang ở chế độ "thêm mới" hay "chỉnh sửa"
+    private int editingMonAnId = -1; //  Biến kiểm tra đang ở chế độ "thêm mới" hay "chỉnh sửa"
 
-    // ✅ ActivityResultLauncher để nhận kết quả chọn ảnh từ thư viện
+    //  ActivityResultLauncher để nhận kết quả chọn ảnh từ thư viện
     private final ActivityResultLauncher<Intent> imagePickerLauncher =
             registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
                 if (result.getResultCode() == RESULT_OK && result.getData() != null && result.getData().getData() != null) {
@@ -80,7 +80,7 @@ public class ThemMonAnActivity extends AppCompatActivity {
                 }
             });
 
-    // ✅ Yêu cầu quyền đọc ảnh nếu chưa được cấp
+    //  Yêu cầu quyền đọc ảnh nếu chưa được cấp
     private final ActivityResultLauncher<String> requestPermissionLauncher =
             registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
                 if (isGranted) openGallery();
@@ -103,19 +103,19 @@ public class ThemMonAnActivity extends AppCompatActivity {
         tvTieuDe = findViewById(R.id.tvTieuDe);
 
         dbHelper = new DatabaseHelper(this);
-        loadDanhMuc(); // ✅ Nạp danh sách danh mục từ DB vào Spinner
+        loadDanhMuc(); // Nạp danh sách danh mục từ DB vào Spinner
 
-        // ✅ Kiểm tra xem có đang sửa món ăn hay không
+        // Kiểm tra xem có đang sửa món ăn hay không
         editingMonAnId = getIntent().getIntExtra(EXTRA_EDIT_MONAN_ID, -1);
         if (editingMonAnId != -1) {
             setupEditMode();
             loadDataForEditing(editingMonAnId);
         }
 
-        // ✅ Sự kiện nút chọn ảnh
+        // Sự kiện nút chọn ảnh
         btnChonAnh.setOnClickListener(v -> showImageSourceDialog());
 
-        // ✅ Sự kiện nút lưu
+        //  Sự kiện nút lưu
         btnLuu.setOnClickListener(v -> saveData());
     }
 
@@ -124,7 +124,7 @@ public class ThemMonAnActivity extends AppCompatActivity {
         btnLuu.setText("Cập nhật");
     }
 
-    // ✅ Tải dữ liệu món ăn cần chỉnh sửa
+    //  dữ liệu món ăn cần chỉnh sửa
     private void loadDataForEditing(int id) {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         try {
@@ -153,14 +153,14 @@ public class ThemMonAnActivity extends AppCompatActivity {
                 }
             }
 
-            // ✅ Nạp danh sách nguyên liệu
+            // Nạp danh sách nguyên liệu
             try (Cursor cursorNL = db.rawQuery("SELECT tenNguyenLieu FROM NguyenLieu WHERE idMonAn = ?", new String[]{String.valueOf(id)})) {
                 List<String> nguyenLieuList = new ArrayList<>();
                 while (cursorNL.moveToNext()) nguyenLieuList.add(cursorNL.getString(0));
                 edtNguyenLieu.setText(TextUtils.join("\n", nguyenLieuList));
             }
 
-            // ✅ Nạp danh sách bước làm
+            // Nạp danh sách bước làm
             try (Cursor cursorBL = db.rawQuery("SELECT moTaBuoc FROM BuocNau WHERE idMonAn = ? ORDER BY soThuTu ASC", new String[]{String.valueOf(id)})) {
                 List<String> buocLamList = new ArrayList<>();
                 while (cursorBL.moveToNext()) buocLamList.add(cursorBL.getString(0));
@@ -171,7 +171,7 @@ public class ThemMonAnActivity extends AppCompatActivity {
         }
     }
 
-    // ✅ Hàm lưu dữ liệu món ăn (thêm mới hoặc cập nhật)
+    // Hàm lưu dữ liệu món ăn (thêm mới hoặc cập nhật)
     private void saveData() {
         String tenMon = edtTenMon.getText().toString().trim();
         String nguyenLieu = edtNguyenLieu.getText().toString().trim();
@@ -184,37 +184,35 @@ public class ThemMonAnActivity extends AppCompatActivity {
         }
 
         SQLiteDatabase db = dbHelper.getWritableDatabase();
-        db.beginTransaction(); // ✅ Đảm bảo các thao tác được thực hiện nguyên khối (atomic)
+        db.beginTransaction(); // Đảm bảo các thao tác được thực hiện nguyên khối (atomic)
         try {
             ContentValues valuesMon = new ContentValues();
             valuesMon.put("tenMon", tenMon);
             valuesMon.put("idDanhMuc", listIdDanhMuc.get(indexDanhMuc));
 
-            // ✅ Lưu ảnh: ưu tiên ảnh trong drawable, sau đó đến URI
+            // Lưu ảnh: ưu tiên ảnh trong drawable, sau đó đến URI vào database
             String anhPathToSave = "";
             if (selectedImageResourceId != null) anhPathToSave = String.valueOf(selectedImageResourceId);
             else if (selectedImageUri != null) anhPathToSave = selectedImageUri.toString();
             valuesMon.put("anhMon", anhPathToSave);
 
             long monAnIdForDetails;
-
             if (editingMonAnId != -1) {
-                // ✅ Chỉnh sửa món ăn
+                //  Chỉnh sửa món ăn
                 db.update("MonAn", valuesMon, "idMonAn = ?", new String[]{String.valueOf(editingMonAnId)});
                 monAnIdForDetails = editingMonAnId;
                 Toast.makeText(this, "Đã cập nhật món ăn!", Toast.LENGTH_SHORT).show();
             } else {
-                // ✅ Thêm mới món ăn
+                // Thêm mới món ăn
                 monAnIdForDetails = db.insert("MonAn", null, valuesMon);
                 if (monAnIdForDetails == -1) throw new Exception("Lỗi khi thêm món ăn!");
                 Toast.makeText(this, "Đã lưu món ăn thành công!", Toast.LENGTH_SHORT).show();
             }
 
-            // ✅ Xóa dữ liệu cũ của nguyên liệu & bước nấu (nếu là cập nhật)
             db.delete("NguyenLieu", "idMonAn = ?", new String[]{String.valueOf(monAnIdForDetails)});
             db.delete("BuocNau", "idMonAn = ?", new String[]{String.valueOf(monAnIdForDetails)});
 
-            // ✅ Thêm danh sách nguyên liệu và bước nấu mới
+            //  Thêm danh sách nguyên liệu và bước nấu mới
             insertDetails(db, monAnIdForDetails, nguyenLieu, buocLam);
 
             db.setTransactionSuccessful();
@@ -227,7 +225,6 @@ public class ThemMonAnActivity extends AppCompatActivity {
         }
     }
 
-    // ✅ Thêm nguyên liệu và bước nấu vào bảng chi tiết
     private void insertDetails(SQLiteDatabase db, long monAnId, String nguyenLieu, String buocLam) {
         String[] dsNguyenLieu = nguyenLieu.split("\\s*\\n+\\s*");
         for (String item : dsNguyenLieu) {
@@ -251,8 +248,6 @@ public class ThemMonAnActivity extends AppCompatActivity {
             }
         }
     }
-
-    // ✅ Hộp thoại chọn nguồn ảnh (ảnh gợi ý hoặc thư viện)
     private void showImageSourceDialog() {
         final CharSequence[] options = { "Chọn từ ảnh gợi ý", "Chọn từ thư viện ảnh", "Hủy" };
         new AlertDialog.Builder(this)
@@ -264,7 +259,6 @@ public class ThemMonAnActivity extends AppCompatActivity {
                 }).show();
     }
 
-    // ✅ Hiển thị dialog chứa danh sách ảnh gợi ý
     private void showChonAnhDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         View dialogView = getLayoutInflater().inflate(R.layout.dialog_chon_anh, null);
@@ -287,7 +281,7 @@ public class ThemMonAnActivity extends AppCompatActivity {
         dialog.show();
     }
 
-    // ✅ Kiểm tra quyền và mở thư viện ảnh
+    // Kiểm tra quyền và mở thư viện ảnh
     private void handleChonAnhTuThuVien() {
         String permission = (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
                 ? Manifest.permission.READ_MEDIA_IMAGES
@@ -299,7 +293,7 @@ public class ThemMonAnActivity extends AppCompatActivity {
             requestPermissionLauncher.launch(permission);
     }
 
-    // ✅ Mở thư viện ảnh bằng ACTION_OPEN_DOCUMENT (đảm bảo truy cập an toàn)
+    // Mở thư viện ảnh bằng ACTION_OPEN_DOCUMENT (đảm bảo truy cập an toàn)
     private void openGallery() {
         Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
         intent.addCategory(Intent.CATEGORY_OPENABLE);
@@ -307,7 +301,7 @@ public class ThemMonAnActivity extends AppCompatActivity {
         imagePickerLauncher.launch(intent);
     }
 
-    // ✅ Nạp danh sách danh mục từ bảng DanhMuc
+    // Nạp danh sách danh mục từ bảng DanhMuc
     private void loadDanhMuc() {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         try (Cursor cursor = db.rawQuery("SELECT idDanhMuc, tenDanhMuc FROM DanhMuc", null)) {
